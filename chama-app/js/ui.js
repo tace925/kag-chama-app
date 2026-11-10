@@ -140,10 +140,14 @@ App.forms.login = (f, d) => {
 function run(fn, quiet) { try { return fn(); } catch (e) { if (!quiet) toast(e.message || String(e), 'bad'); else console.warn(e); } }
 document.addEventListener('click', e => {
   if (e.target.classList && e.target.classList.contains('modal-back')) { closeModal(); return; }
- const href = el.getAttribute('href') || '';
-const isRouteLink = el.tagName === 'A' && href.startsWith('#/');
-if (!isRouteLink && (el.tagName === 'A' || el.type === 'submit' || el.tagName === 'BUTTON')) e.preventDefault();
-  if (el.dataset.confirm && !window.confirm(el.dataset.confirm)) return;
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const fn = App.acts[el.dataset.act]; if (!fn) return;
+  /* FIX: links that point to a route (#/something) must be allowed to navigate.
+     Before, every <a data-act> had its default prevented, so sidebar links did nothing. */
+  const href = el.getAttribute('href') || '';
+  const isRouteLink = el.tagName === 'A' && href.indexOf('#/') === 0;
+  if (!isRouteLink && (el.tagName === 'A' || el.type === 'submit' || el.tagName === 'BUTTON')) e.preventDefault();
+  if (el.dataset.confirm && !window.confirm(el.dataset.confirm)) { if (isRouteLink) e.preventDefault(); return; }
   run(() => fn(el, e));
 });
 document.addEventListener('submit', e => {
