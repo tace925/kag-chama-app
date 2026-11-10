@@ -140,9 +140,9 @@ App.forms.login = (f, d) => {
 function run(fn, quiet) { try { return fn(); } catch (e) { if (!quiet) toast(e.message || String(e), 'bad'); else console.warn(e); } }
 document.addEventListener('click', e => {
   if (e.target.classList && e.target.classList.contains('modal-back')) { closeModal(); return; }
-  const el = e.target.closest('[data-act]'); if (!el) return;
-  const fn = App.acts[el.dataset.act]; if (!fn) return;
-  if (el.tagName === 'A' || el.type === 'submit' || el.tagName === 'BUTTON') e.preventDefault();
+ const href = el.getAttribute('href') || '';
+const isRouteLink = el.tagName === 'A' && href.startsWith('#/');
+if (!isRouteLink && (el.tagName === 'A' || el.type === 'submit' || el.tagName === 'BUTTON')) e.preventDefault();
   if (el.dataset.confirm && !window.confirm(el.dataset.confirm)) return;
   run(() => fn(el, e));
 });
