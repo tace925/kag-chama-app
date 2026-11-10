@@ -1,0 +1,13 @@
+{
+  "name": "kag-chama-app",
+  "version": "1.0.0",
+  "description": "Church savings groups (merry-go-round + table banking) as an installable web app. Crafted & polished by TEVINTECH.",
+  "private": true,
+  "scripts": {
+    "start": "npx serve .",
+    "test:engine": "node tests/core.test.js",
+    "test:ui": "node tests/ui.smoke.test.js",
+    "test": "node tests/core.test.js && node tests/ui.smoke.test.js"
+  },
+  "devDependencies": { "jsdom": "^31.0.0" }
+}
